@@ -1,0 +1,19 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Minimal CDK bootstrap (bucket only, no IAM roles)
+
+Resources:
+  StagingBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub 'cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}'
+      VersioningConfiguration: { Status: Enabled }
+  CdkBootstrapVersion:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: "/cdk-bootstrap/hnb659fds/version"
+      Type: String
+      Value: "10"
+
+Outputs:
+  BucketName:
+    Value: !Ref StagingBucket

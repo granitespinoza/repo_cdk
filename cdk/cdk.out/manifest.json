@@ -1,0 +1,72 @@
+{
+  "version": "41.0.0",
+  "artifacts": {
+    "Aws2Stack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://576981141537/us-east-1",
+      "properties": {
+        "templateFile": "Aws2Stack.template.json",
+        "terminationProtection": false,
+        "validateOnSynth": false
+      },
+      "metadata": {
+        "/Aws2Stack/AMI": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AMI"
+          }
+        ],
+        "/Aws2Stack/SG/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SGADB53937"
+          }
+        ],
+        "/Aws2Stack/Instance/InstanceProfile": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "InstanceInstanceProfileAB5AEF02"
+          }
+        ],
+        "/Aws2Stack/Instance/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "InstanceC1063A87"
+          }
+        ],
+        "/Aws2Stack/PublicIP": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PublicIP"
+          }
+        ],
+        "/Aws2Stack/URLwebsimple": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "URLwebsimple"
+          }
+        ],
+        "/Aws2Stack/URLwebplantilla": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "URLwebplantilla"
+          }
+        ],
+        "/Aws2Stack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ]
+      },
+      "displayName": "Aws2Stack"
+    },
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    }
+  },
+  "minimumCliVersion": "2.1005.0"
+}

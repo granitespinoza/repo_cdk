@@ -1,0 +1,154 @@
+{
+ "Parameters": {
+  "AMI": {
+   "Type": "String",
+   "Default": "ami-0aa28dab1f2852040",
+   "Description": "AMI Cloud9 Ubuntu22"
+  }
+ },
+ "Resources": {
+  "SGADB53937": {
+   "Type": "AWS::EC2::SecurityGroup",
+   "Properties": {
+    "GroupDescription": "SSH (22) y HTTP (80)",
+    "SecurityGroupEgress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "Allow all outbound traffic by default",
+      "IpProtocol": "-1"
+     }
+    ],
+    "SecurityGroupIngress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "SSH",
+      "FromPort": 22,
+      "IpProtocol": "tcp",
+      "ToPort": 22
+     },
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "HTTP",
+      "FromPort": 80,
+      "IpProtocol": "tcp",
+      "ToPort": 80
+     }
+    ],
+    "VpcId": "vpc-0e1e768ae36b3c46c"
+   },
+   "Metadata": {
+    "aws:cdk:path": "Aws2Stack/SG/Resource"
+   }
+  },
+  "InstanceInstanceProfileAB5AEF02": {
+   "Type": "AWS::IAM::InstanceProfile",
+   "Properties": {
+    "Roles": [
+     "LabRole"
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "Aws2Stack/Instance/InstanceProfile"
+   }
+  },
+  "InstanceC1063A87": {
+   "Type": "AWS::EC2::Instance",
+   "Properties": {
+    "AvailabilityZone": "us-east-1a",
+    "BlockDeviceMappings": [
+     {
+      "DeviceName": "/dev/sda1",
+      "Ebs": {
+       "VolumeSize": 20
+      }
+     }
+    ],
+    "IamInstanceProfile": {
+     "Ref": "InstanceInstanceProfileAB5AEF02"
+    },
+    "ImageId": {
+     "Ref": "AMI"
+    },
+    "InstanceType": "t2.micro",
+    "KeyName": "vockey",
+    "SecurityGroupIds": [
+     {
+      "Fn::GetAtt": [
+       "SGADB53937",
+       "GroupId"
+      ]
+     }
+    ],
+    "SubnetId": "subnet-0276fce6a02c0024c",
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "Aws2Stack/Instance"
+     }
+    ],
+    "UserData": {
+     "Fn::Base64": "#!/bin/bash\n#!/bin/bash\nyum update -y\nyum install -y git httpd\nsystemctl enable httpd && systemctl start httpd\ncd /var/www/html\ngit clone https://github.com/granitespinoza/websimple.git\ngit clone https://github.com/granitespinoza/webplantilla.git\nchown -R ec2-user:ec2-user /var/www/html"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "Aws2Stack/Instance/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/1WKQQ6CMBBFz8K+jIAbXbswrmzgAGasQxyBlkynIYRwd0OMia7+z3uvgvJwhCLDKebu0eU932FpFF1nTq23KDiQkpiaYkjiyOAUbwu5CpaGXBLW+SwhjVv9Dy4+KnpHm/n+1TAO8AOshJZ7WrfomnRMuho76zP43R7KAsoqe0XmXJJXHgjqz74BOcAtWbYAAAA="
+   },
+   "Metadata": {
+    "aws:cdk:path": "Aws2Stack/CDKMetadata/Default"
+   }
+  }
+ },
+ "Outputs": {
+  "PublicIP": {
+   "Description": "IP pública",
+   "Value": {
+    "Fn::GetAtt": [
+     "InstanceC1063A87",
+     "PublicIp"
+    ]
+   }
+  },
+  "URLwebsimple": {
+   "Description": "URL websimple",
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "http://",
+      {
+       "Fn::GetAtt": [
+        "InstanceC1063A87",
+        "PublicIp"
+       ]
+      },
+      "/websimple"
+     ]
+    ]
+   }
+  },
+  "URLwebplantilla": {
+   "Description": "URL webplantilla",
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "http://",
+      {
+       "Fn::GetAtt": [
+        "InstanceC1063A87",
+        "PublicIp"
+       ]
+      },
+      "/webplantilla"
+     ]
+    ]
+   }
+  }
+ }
+}
